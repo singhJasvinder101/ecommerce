@@ -2,18 +2,30 @@ import Stripe from 'stripe';
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { nanoid } from 'nanoid';
+import { Readable } from 'stream';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const webhookSecret: string = process.env.STRIPE_WEBHOOK_SECRET!;
 
+async function buffer(readable: Readable) {
+    const chunks = [];
+    for await (const chunk of readable) {
+        chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+    }
+    return Buffer.concat(chunks);
+}
+
 export async function POST(req: NextRequest) {
-    const body = await req.text();
+    // const body = await req.text();   
+    // was not working in production (vercel function)
+    // https://stackoverflow.com/questions/53899365/stripe-error-no-signatures-found-matching-the-expected-signature-for-payload
+    const rawBody = await buffer(req.body as any);
     const signature = req.headers.get('stripe-signature') as string;
 
     let event: Stripe.Event;
 
     try {
-        event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+        event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
     } catch (err: any) {
         console.log(`Webhook signature verification failed.`, err.message);
         return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
