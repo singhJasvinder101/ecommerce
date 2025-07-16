@@ -3,11 +3,11 @@
 - **Framework:** [Next.js](https://nextjs.org)
 - **Styling:** [Tailwind CSS](https://tailwindcss.com)
 - **Authentication:** [Next Auth](https://authjs.dev)
-- **Database:** [Mysql](https://www.mysql.com)
+- **Database:** [Postgres](https://www.postgresql.org/)
 - **ORM:** [Prisma ORM](https://www.prisma.io)
 - **UI Components:** [shadcn/ui](https://ui.shadcn.com)
 - **File Uploads:** [uploadthing](https://uploadthing.com)
-- **Payments infrastructure:** [Midtrans](https://midtrans.com)
+- **Payments infrastructure:** [Stripe](https://stripe.com/)
 
 
 ## Running Locally
@@ -76,7 +76,7 @@
 ## Where do I deploy this?
 
 - For the Nextjs application, I deploy it on [Vercel](https://vercel.com/)
-- And for the MySQL database I deploy it on [Aiven](https://aiven.io/)
+- And for the PostgreSQL database I deploy it on [Neon](https://neon.com/)
 
 ## Contributing
 
